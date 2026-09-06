@@ -11,7 +11,6 @@ st.text("by Suphannika")
 
 
 
-# Read data
 allproduct_conn = st.connection("allproduct_gsheet", type=GSheetsConnection)
 allproduct_df = allproduct_conn.read()
 
