@@ -9,3 +9,39 @@ st.title(":blue[MizuMi] TIKTOK PERFORMANCE")
 st.text("by Suphannika")
 
 
+@st.cache_data(ttl="6h")
+def load_data():
+
+    allproduct_conn = st.connection(
+        "allproduct_gsheet",
+        type=GSheetsConnection
+    )
+    allproduct_df = allproduct_conn.read()
+
+    affiliate_conn = st.connection(
+        "affiliate_gsheet",
+        type=GSheetsConnection
+    )
+    affiliate_df = affiliate_conn.read()
+
+    mcn_conn = st.connection(
+        "mcn_gsheet",
+        type=GSheetsConnection
+    )
+    mcn_df = mcn_conn.read()
+
+    kalodata_conn = st.connection(
+        "kalodata_gsheet",
+        type=GSheetsConnection
+    )
+    kalodata_df = kalodata_conn.read()
+
+    return allproduct_df, affiliate_df, mcn_df, kalodata_df
+
+
+allproduct_df, affiliate_df, mcn_df, kalodata_df = load_data()
+
+st.write(allproduct_df.shape)
+st.write(affiliate_df.shape)
+st.write(mcn_df.shape)
+st.write(kalodata_df.shape)
