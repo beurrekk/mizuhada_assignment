@@ -43,7 +43,7 @@ def load_data():
 
 allproduct_df, affiliate_df, mcn_df, kalodata_df = load_data()
 
-allproduct_df
-affiliate_df
-mcn_df
-kalodata_df
+st.write(allproduct_df.shape)
+st.write(affiliate_df.shape)
+st.write(mcn_df.shape)
+st.write(kalodata_df.shape)
