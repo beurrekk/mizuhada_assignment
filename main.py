@@ -5,6 +5,9 @@ import plotly.express as px
 # Set Streamlit wide mode
 st.set_page_config(layout="wide")
 
+# Define custom colors
+colors = ['#F2DD83', '#9A8CB5','#CBD9EF', '#FCD5C6',  '#EB9861', '#72884B', '#567BA2']
+
 # Load data
 uploaded_file = "Edit_Review.csv"
 df = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
