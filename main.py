@@ -50,6 +50,7 @@ df = allproduct_df.copy()
 # Clean datetime
 df["Created Time"] = pd.to_datetime(
     df["Created Time"],
+    format="%d/%m/%Y %H:%M:%S",
     errors="coerce"
 )
 
