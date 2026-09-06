@@ -17,10 +17,10 @@ allproduct_df = allproduct_conn.read()
 affiliate_conn = st.connection("affiliate_gsheet", type=GSheetsConnection)
 affiliate_df = affiliate_conn.read()
 
-mcn_conn = st.connection("mcn_gsheett", type=GSheetsConnection)
+mcn_conn = st.connection("mcn_gsheet", type=GSheetsConnection)
 mcn_df = mcn_conn.read()
 
-kalodata_conn = st.connection("kalodata_gsheett", type=GSheetsConnection)
+kalodata_conn = st.connection("kalodata_gsheet", type=GSheetsConnection)
 kalodata_df = kalodata_conn.read()
 
 
