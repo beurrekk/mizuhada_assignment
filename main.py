@@ -9,7 +9,7 @@ st.set_page_config(layout="wide")
 st.title(":blue[MizuMi] TIKTOK PERFORMANCE")
 st.text("by Suphannika")
 
-conn = st.connection("allproduct_gsheet", type=GSheetsConnection)
-df = conn.read()
+allproduct_conn = st.connection("allproduct_gsheet", type=GSheetsConnection)
+df = allproduct_conn.read()
 
 st.dataframe(df)
