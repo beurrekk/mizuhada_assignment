@@ -10,6 +10,6 @@ st.title(":blue[MizuMi] TIKTOK PERFORMANCE")
 st.text("by Suphannika")
 
 conn = st.connection("allproduct_gsheet", type=GSheetsConnection)
-df = conn.read(worksheet="Example 1")
+df = conn.read()
 
 st.dataframe(df)
