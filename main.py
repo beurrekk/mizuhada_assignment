@@ -45,15 +45,113 @@ allproduct_df, affiliate_df, mcn_df, kalodata_df = load_data()
 
 
     
+df = allproduct_df.copy()
+
+# Clean datetime
+df["Created Time"] = pd.to_datetime(
+    df["Created Time"],
+    errors="coerce"
+)
+
+# Clean revenue
+df["SKU Subtotal After Discount"] = pd.to_numeric(
+    df["SKU Subtotal After Discount"],
+    errors="coerce"
+).fillna(0)
+
+# Create month
+df["Month"] = df["Created Time"].dt.to_period("M")
+
+
+# =========================
+# Get number of days
+# from ALL orders
+# =========================
+
+month_days = (
+    df.dropna(subset=["Created Time"])
+    .groupby("Month")
+    .agg(
+        Start_Date=("Created Time", "min"),
+        End_Date=("Created Time", "max")
+    )
+    .reset_index()
+)
+
+month_days["Days"] = (
+    month_days["End_Date"].dt.normalize()
+    - month_days["Start_Date"].dt.normalize()
+).dt.days + 1
+
+
+# =========================
+# Filter Completed only
+# =========================
+
+completed_df = df[
+    df["Order Status"]
+    .astype(str)
+    .str.strip()
+    .str.lower()
+    .isin(["completed", "complete"])
+].copy()
+
+
+# =========================
+# Monthly summary
+# =========================
+
+monthly_summary = (
+    completed_df
+    .groupby("Month")
+    .agg(
+        Completed_Orders=("Order ID", "nunique"),
+        Revenue=("SKU Subtotal After Discount", "sum")
+    )
+    .reset_index()
+)
+
+# Merge days
+monthly_summary = monthly_summary.merge(
+    month_days[["Month", "Days"]],
+    on="Month",
+    how="left"
+)
+
+# Avg Daily Revenue
+monthly_summary["Avg Daily Revenue"] = (
+    monthly_summary["Revenue"]
+    / monthly_summary["Days"]
+)
+
+# Growth vs previous month
+monthly_summary["Growth"] = (
+    monthly_summary["Avg Daily Revenue"]
+    .pct_change()
+    * 100
+)
+
+# Month display
+monthly_summary["Month"] = (
+    monthly_summary["Month"]
+    .dt.strftime("%b %Y")
+)
+
+
+# =========================
+# Rename for display
+# =========================
+
 display_df = monthly_summary.rename(
     columns={
-        "Completed_Orders": "Completed Orders",
-        "Revenue": "Revenue",
-        "Active_Days": "Days",
-        "Avg Daily Revenue": "Avg Daily Revenue",
-        "Growth": "Growth"
+        "Completed_Orders": "Completed Orders"
     }
 )
+
+
+# =========================
+# Streamlit table
+# =========================
 
 st.subheader("Monthly Revenue Performance — Completed Orders")
 
@@ -73,7 +171,7 @@ st.dataframe(
 
         "Revenue": st.column_config.NumberColumn(
             "Revenue",
-            format="฿%,.0f"
+            format="฿%.0f"
         ),
 
         "Days": st.column_config.NumberColumn(
@@ -83,7 +181,7 @@ st.dataframe(
 
         "Avg Daily Revenue": st.column_config.NumberColumn(
             "Avg Daily Revenue",
-            format="฿%,.0f"
+            format="฿%.0f"
         ),
 
         "Growth": st.column_config.NumberColumn(
@@ -92,11 +190,3 @@ st.dataframe(
         ),
     }
 )
-
-
-
-
-
-
-
-
