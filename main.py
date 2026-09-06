@@ -7,8 +7,3 @@ from streamlit_gsheets import GSheetsConnection
 st.set_page_config(layout="wide")
 
 st.title(":blue[MizuMi] TIKTOK PERFORMANCE")
-
-conn = st.connection("allproduct_gsheet", type=GSheetsConnection)
-df = conn.read(worksheet="Example 1")
-
-st.dataframe(df)
