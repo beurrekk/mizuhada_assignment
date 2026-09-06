@@ -42,3 +42,8 @@ def load_data():
 
 
 allproduct_df, affiliate_df, mcn_df, kalodata_df = load_data()
+
+allproduct_df
+affiliate_df
+mcn_df
+kalodata_df
